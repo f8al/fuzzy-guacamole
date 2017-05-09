@@ -7,7 +7,7 @@ from ConfigParser import SafeConfigParser
 
 #load configuration file
 parser = SafeConfigParser()
-parser.read('../etc/speedcheck.conf')
+parser.read('../etc/guac.conf')
 
 
 #print parser.get('twitter','consumer_key')
@@ -54,7 +54,7 @@ def main():
     }
 
   api = get_api(cfg)
-  tweet = "fuzzy-guacamole test tweet 3"
+  tweet = "fuzzy-guacamole guac migration test 1"
   status = api.update_status(status=tweet)
   # Yes, tweet is called 'status' rather confusing
 
