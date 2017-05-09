@@ -14,15 +14,16 @@ def get_api(cfg):
   return tweepy.API(auth)
 
 def main():
-
     '''get configs'''
     c_key = parser.get('twitter', 'consumer_key')
     c_secret = parser.get('twitter', 'consumer_secret')
     a_token = parser.get('twitter', 'access_token')
     a_t_secret = parser.get('twitter','access_token_secret')
     handle = parser.get('twitter', 'isp_handle')
+    down = parser.get('global','speed_down')
+    up = parser.get('global', 'speed_up')
 
-    '''SPEEd TEST'''
+    '''SPEED TEST'''
     servers = []
     s = speedtest.Speedtest()
     s.get_servers(servers)
@@ -35,7 +36,6 @@ def main():
     ul = float(results_dict["upload"])
     dl = ((dl / 1024) / 1024)
     ul = ((ul / 1024) / 1024)
-
     dlr = round(dl,4)
     ulr = round(ul,4)
 
@@ -45,12 +45,19 @@ def main():
         "access_token"        : a_token,
         "access_token_secret" : a_t_secret
     }
-
     api = get_api(cfg)
-    if
-    tweet = "hey "+ handle +" fuzzy-guacamole says current download speed is " + str(dlr) + " MBps and upload is " + str(ulr) + " MBps! This is less than 66% of paid service level!"
-    print tweet
-    #status = api.update_status(status=tweet)
+    if float(dlr) <= float(down) * 0.66:
+        tweet = "hey "+ handle +" fuzzy-guacamole says current download speed is " + str(dlr) + " MBps! This is less than 66% of paid service level!"
+        print tweet
+    elif float(ulr) <= float(up) * 0.66:
+        tweet = "hey "+ handle +" fuzzy-guacamole says current upload speed is " + str(ulr) + " MBps! This is less than 66% of paid service level!"
+        print tweet
+    elif float(dlr) <= float(down) * 0.66 and float(ulr) <= float(up) * 0.66:
+        tweet = "hey " + handle + " fuzzy-guacamole says current download speed is " + str(dlr) + " MBps and upload is " + str(ulr) + " MBps! This is less than 66% of paid service level!"
+        print tweet
+    else:
+        exit()
+    status = api.update_status(status=tweet)
 
 if __name__ == "__main__":
   main()
