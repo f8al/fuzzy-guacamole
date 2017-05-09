@@ -46,6 +46,8 @@ s.upload()
 
 results_dict = s.results.dict()
 
-output = json.dumps({results_dict}, sort_keys=True, indent=4, seperators=(',', ': '))
+print results_dict
+
+output = json.loads({results_dict}, sort_keys=True, indent=4, seperators=(',', ': '))
 
 print output
