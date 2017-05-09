@@ -1,6 +1,8 @@
 #!/bin/python
 import ConfigParser
 import os
+import speedtest
+import json
 
 
 
@@ -8,8 +10,9 @@ import os
 
 #load configuration file
 Config = ConfigParser.ConfigParser()
-Config.read("../etc/shell.conf")
+Config.read("../etc/speedcheck.conf")
 
+print Config
 
 #config function
 def ConfigSectionMap(section):
@@ -26,5 +29,23 @@ def ConfigSectionMap(section):
     return dict1
 
 
-HOST = ConfigSectionMap("global")['lhost']
-PORT = ConfigSectionMap("global")['lport']
+#HOST = ConfigSectionMap("global")['lhost']
+#PORT = ConfigSectionMap("global")['lport']
+
+
+servers = []
+# If you want to test against a specific server
+# servers = [1234]
+
+s = speedtest.Speedtest()
+s.get_servers(servers)
+s.get_best_server()
+s.download()
+s.upload()
+
+
+results_dict = s.results.dict()
+
+output = json.dumps({results_dict}, sort_keys=True, indent=4, seperators=(',', ': '))
+
+print output
