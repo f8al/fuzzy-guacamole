@@ -1,5 +1,4 @@
 #!/bin/python
-import ConfigParser
 import speedtest
 import tweepy
 from ConfigParser import SafeConfigParser
@@ -7,32 +6,7 @@ from ConfigParser import SafeConfigParser
 
 #load configuration file
 parser = SafeConfigParser()
-parser.read('../etc/guac.conf')
-
-
-#print parser.get('twitter','consumer_key')
-
-
-
-
-def s_test():
-    #servers = []
-    # If you want to test against a specific server
-    # servers = [1234]
-    s = speedtest.Speedtest()
-    s.get_servers(servers)
-    s.get_best_server()
-    s.download()
-    s.upload()
-    results_dict = s.results.dict()
-    print "Download speed is: " + str(results_dict["download"]) + "!"
-    print "Upload speed is: " + str(results_dict["upload"]) + "!"
-    print "Ping is: " + str(results_dict["ping"]) + "!"
-
-
-
-
-
+parser.read('../etc/guac.conf') #change this to speedtest.conf once configured
 
 def get_api(cfg):
   auth = tweepy.OAuthHandler(cfg['consumer_key'], cfg['consumer_secret'])
@@ -40,23 +14,43 @@ def get_api(cfg):
   return tweepy.API(auth)
 
 def main():
-  # Fill in the values noted in previous step here
-  c_key = parser.get('twitter', 'consumer_key')
-  c_secret = parser.get('twitter', 'consumer_secret')
-  a_token = parser.get('twitter', 'access_token')
-  a_t_secret = parser.get('twitter','access_token_secret')
 
-  cfg = {
-    "consumer_key"        : c_key,
-    "consumer_secret"     : c_secret,
-    "access_token"        : a_token,
-    "access_token_secret" : a_t_secret
+    '''get configs'''
+    c_key = parser.get('twitter', 'consumer_key')
+    c_secret = parser.get('twitter', 'consumer_secret')
+    a_token = parser.get('twitter', 'access_token')
+    a_t_secret = parser.get('twitter','access_token_secret')
+    handle = parser.get('twitter', 'isp_handle')
+
+    '''SPEEd TEST'''
+    servers = []
+    s = speedtest.Speedtest()
+    s.get_servers(servers)
+    s.get_best_server()
+    s.download()
+    s.upload()
+    results_dict = s.results.dict()
+
+    dl = float(results_dict["download"])
+    ul = float(results_dict["upload"])
+    dl = ((dl / 1024) / 1024)
+    ul = ((ul / 1024) / 1024)
+
+    dlr = round(dl,4)
+    ulr = round(ul,4)
+
+    cfg = {
+        "consumer_key"        : c_key,
+        "consumer_secret"     : c_secret,
+        "access_token"        : a_token,
+        "access_token_secret" : a_t_secret
     }
 
-  api = get_api(cfg)
-  tweet = "fuzzy-guacamole guac migration test 1"
-  status = api.update_status(status=tweet)
-  # Yes, tweet is called 'status' rather confusing
+    api = get_api(cfg)
+    if
+    tweet = "hey "+ handle +" fuzzy-guacamole says current download speed is " + str(dlr) + " MBps and upload is " + str(ulr) + " MBps! This is less than 66% of paid service level!"
+    print tweet
+    #status = api.update_status(status=tweet)
 
 if __name__ == "__main__":
   main()
