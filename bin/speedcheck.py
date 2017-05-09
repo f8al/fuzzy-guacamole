@@ -2,28 +2,15 @@
 import ConfigParser
 import speedtest
 import tweepy
+from ConfigParser import SafeConfigParser
+
 
 #load configuration file
-Config = ConfigParser.ConfigParser()
-Config.read("../etc/speedcheck.conf")
+parser = SafeConfigParser()
+parser.read('../etc/speedcheck.conf')
 
 
-print Config
-
-#config function
-def ConfigSectionMap(section):
-    dict1 = {}
-    options = Config.options(section)
-    for option in options:
-        try:
-            dict1[option] = Config.get(section, option)
-            if dict1[option] == -1:
-                DebugPrint("skip: %s" % option)
-        except:
-            print("exception on %s!" % option)
-            dict1[option] = None
-    return dict1
-
+#print parser.get('twitter','consumer_key')
 
 
 
@@ -54,15 +41,20 @@ def get_api(cfg):
 
 def main():
   # Fill in the values noted in previous step here
+  c_key = parser.get('twitter', 'consumer_key')
+  c_secret = parser.get('twitter', 'consumer_secret')
+  a_token = parser.get('twitter', 'access_token')
+  a_t_secret = parser.get('twitter','access_token_secret')
+
   cfg = {
-    "consumer_key"        : "VALUE",
-    "consumer_secret"     : "VALUE",
-    "access_token"        : "VALUE",
-    "access_token_secret" : "VALUE"
+    "consumer_key"        : c_key,
+    "consumer_secret"     : c_secret,
+    "access_token"        : a_token,
+    "access_token_secret" : a_t_secret
     }
 
   api = get_api(cfg)
-  tweet = "Hello, world!"
+  tweet = "fuzzy-guacamole test tweet 3"
   status = api.update_status(status=tweet)
   # Yes, tweet is called 'status' rather confusing
 
