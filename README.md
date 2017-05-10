@@ -7,6 +7,8 @@ via cron on a hardware firewall.
 
 # Requirements
 This app requires a couple of python packages installable with pip. Run `pip install -r requirements.txt` to get them:
+
+The installed packages are:
 - tweepy
 - speedtest-cli
 
@@ -23,3 +25,4 @@ Required details needed are as follows:
 - twitter access_token        
 - twitter access_token_secret 
 - Splunk HTTP Event Collector Token
+- Splunk server URL

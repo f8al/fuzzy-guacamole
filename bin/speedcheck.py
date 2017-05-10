@@ -24,7 +24,8 @@ def main():
     handle = parser.get('twitter', 'isp_handle')
     down = parser.get('global','speed_down')
     up = parser.get('global', 'speed_up')
-    HEC_token = parser.get('global', 'HEC_token')
+    HEC_token = parser.get('splunk', 'HEC_token')
+    splunk_server = parser.get('splunk', 'splunk_server')
 
     '''SPEED TEST'''
     servers = []
@@ -58,13 +59,10 @@ def main():
     else:
         exit()
     print tweet
-    status = api.update_status(status=tweet)
+    #status = api.update_status(status=tweet)
     headers = {'Authorization' : HEC_token}
     payload = results_dict
-    r = requests.post('http://posttestserver.com/post.php', headers=headers, data=payload)
-    print r
-    print r.text
-    print r.headers
+    r = requests.post('http://'+splunk_server+':8088', headers=headers, data=payload)
 
 if __name__ == "__main__":
   main()
