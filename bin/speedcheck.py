@@ -1,6 +1,7 @@
 #!/bin/python
 import speedtest
 import tweepy
+import requests
 from ConfigParser import SafeConfigParser
 
 
@@ -13,6 +14,7 @@ def get_api(cfg):
   auth.set_access_token(cfg['access_token'], cfg['access_token_secret'])
   return tweepy.API(auth)
 
+
 def main():
     '''get configs'''
     c_key = parser.get('twitter', 'consumer_key')
@@ -22,6 +24,7 @@ def main():
     handle = parser.get('twitter', 'isp_handle')
     down = parser.get('global','speed_down')
     up = parser.get('global', 'speed_up')
+    HEC_token = parser.get('global', 'HEC_token')
 
     '''SPEED TEST'''
     servers = []
@@ -58,6 +61,12 @@ def main():
     else:
         exit()
     status = api.update_status(status=tweet)
+    headers = {'Authorization' : HEC_token}
+    payload = results_dict
+    r = requests.post('http://posttestserver.com/post.php', headers=headers, data=payload)
+    print r
+    print r.text
+    print r.headers
 
 if __name__ == "__main__":
   main()
