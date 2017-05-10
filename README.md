@@ -6,7 +6,7 @@ via cron on a hardware firewall.
 
 
 # Requirements
-This app requires a couple of python packages installable with pip:
+This app requires a couple of python packages installable with pip. Run `pip install -r requirements.txt` to get them:
 - tweepy
 - speedtest-cli
 

@@ -1,0 +1,2 @@
+tweepy
+speedtest-cli

@@ -49,17 +49,15 @@ def main():
         "access_token_secret" : a_t_secret
     }
     api = get_api(cfg)
-    if float(dlr) <= float(down) * 0.66:
+    if float(dlr) <= float(down) * 0.66 and float(ulr) <= float(up) * 0.66:
+        tweet = "hey " + handle + " fuzzy-guacamole says current download speed is " + str(dlr) + "Mbps & upload is " + str(ulr) + "Mbps! This is < 66% of paid service level! #fuzzyguac"
+    elif float(dlr) <= float(down) * 0.66:
         tweet = "hey "+ handle +" fuzzy-guacamole says current download speed is " + str(dlr) + " Mbps! This is less than 66% of paid service level! #shame #fuzzyguac"
-        print tweet
     elif float(ulr) <= float(up) * 0.66:
         tweet = "hey "+ handle +" fuzzy-guacamole says current upload speed is " + str(ulr) + " Mbps! This is less than 66% of paid service level! #shame #fuzzyguac"
-        print tweet
-    elif float(dlr) <= float(down) * 0.66 and float(ulr) <= float(up) * 0.66:
-        tweet = "hey " + handle + " fuzzy-guacamole says current download speed is " + str(dlr) + "Mbps & upload is " + str(ulr) + "Mbps! This is < 66% of paid service level! #fuzzyguac"
-        print tweet
     else:
         exit()
+    print tweet
     status = api.update_status(status=tweet)
     headers = {'Authorization' : HEC_token}
     payload = results_dict
