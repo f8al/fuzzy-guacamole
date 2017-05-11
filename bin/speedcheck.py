@@ -27,8 +27,7 @@ def main():
     up = parser.get('global', 'speed_up')
     HEC_token = parser.get('splunk', 'HEC_token')
     splunk_server = parser.get('splunk', 'splunk_server')
-    #splunk_enabled = parser.get('splunk', 'splunk')
-    splunk_enabled = True
+    splunk_enabled = parser.get('splunk', 'splunk')
 
     '''SPEED TEST'''
     servers = []
@@ -65,7 +64,7 @@ def main():
     status = api.update_status(status=tweet)
 
 
-    if splunk_enabled == True:
+    if splunk_enabled == "True":
         headers = {'Authorization' : HEC_token}
         payload = str(results_dict)
         payload = json.dumps(payload)
