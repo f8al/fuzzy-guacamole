@@ -62,7 +62,7 @@ def main():
     else:
         exit()
     print tweet
-    #status = api.update_status(status=tweet)
+    status = api.update_status(status=tweet)
 
 
     if splunk_enabled == True:
