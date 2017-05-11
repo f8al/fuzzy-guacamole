@@ -3,6 +3,7 @@ import speedtest
 import tweepy
 import requests
 from ConfigParser import SafeConfigParser
+import json
 
 
 #load configuration file
@@ -26,6 +27,8 @@ def main():
     up = parser.get('global', 'speed_up')
     HEC_token = parser.get('splunk', 'HEC_token')
     splunk_server = parser.get('splunk', 'splunk_server')
+    splunk_enabled = parser.get('splunk', 'splunk')
+    #splunk_enabled = True
 
     '''SPEED TEST'''
     servers = []
@@ -40,8 +43,8 @@ def main():
     ul = float(results_dict["upload"])
     dl = ((dl / 1024) / 1024)
     ul = ((ul / 1024) / 1024)
-    dlr = round(dl,4)
-    ulr = round(ul,4)
+    dlr = round(dl,2)
+    ulr = round(ul,2)
 
     cfg = {
         "consumer_key"        : c_key,
@@ -60,9 +63,15 @@ def main():
         exit()
     print tweet
     #status = api.update_status(status=tweet)
-    headers = {'Authorization' : HEC_token}
-    payload = results_dict
-    r = requests.post('http://'+splunk_server+':8088', headers=headers, data=payload)
+
+
+    if splunk_enabled == True:
+        headers = {'Authorization' : HEC_token}
+        payload = str(results_dict)
+        payload = json.dumps({payload})
+        print payload
+        r = requests.post('https://'+ splunk_server + ':8088/services/collector/event', headers=headers, data=payload, verify=False)
+        print r.text
 
 if __name__ == "__main__":
   main()
