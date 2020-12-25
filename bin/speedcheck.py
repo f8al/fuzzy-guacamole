@@ -1,7 +1,6 @@
 #!/bin/python
 import speedtest
 import tweepy
-import requests
 import configparser
 import os
 import logging
